@@ -1,10 +1,11 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const BUILD_DIR = path.resolve(__dirname, './build');
-const APP_DIR = path.resolve(__dirname, './client');
+const BUILD_DIR = path.resolve(__dirname, './client/build');
+const APP_DIR = path.resolve(__dirname, './client/src');
 
 const config = {
+  mode: 'development',
   entry: {
     main: APP_DIR + '/index.js'
   },
@@ -24,13 +25,14 @@ const config = {
       },
       {
         test: /\.(jsx|js)?$/,
+        exclude: /(node_modules)/,
         use: [
           {
-            loader: 'babel-loader',
-            option: {
+            options: {
               cacheDirectory: true,
-              presets: ['react', 'env']
-            }
+              presets: ['@babel/react', '@babel/env']
+            },
+            loader: 'babel-loader'
           }
         ]
       }
