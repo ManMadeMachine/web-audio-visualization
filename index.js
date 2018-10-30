@@ -3,6 +3,7 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
 const audioElement = document.querySelector('audio');
+audioElement.crossOrigin = 'false';
 
 const track = audioCtx.createMediaElementSource(audioElement);
 const gainNode = audioCtx.createGain();
