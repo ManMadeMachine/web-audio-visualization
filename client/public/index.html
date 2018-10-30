@@ -1,102 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-<head>
-</head>
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-<body>
-  <!-- TODO: Start using react for front end -->
-  <div id="root"> </div>
-  <script src="build/bundle.js"></script>
-  
-  
-  <!--<audio id="track" src="virtual-flesh.mp3" type="audio/mpeg"></audio>
-    <button data-playing="false" role="switch" aria-checked="false">
-    <span>Play/Pause</span>
-  </button>
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-  <input type="range" id="volume" min="0" max="2" value="1" step="0.01" />
-  <input type="range" id="panner" min="-1" max="1" value="0" step="0.01" /> -->
-  <!-- <script src="index.js"></script> -->
-
-
-  <!-- Step Sequencer code -->
-  <div id="sequencer">
-    <section class="controls-main">
-      <h1>ModemDN</h1>
-      <label for="bpm">BPM</label>
-      <input name="bpm" id="bpm" type="range" min="10" max="120" value="60" step="1" />
-      <button data-playing="false">Play</button>
-    </section>
-    <div id="tracks">
-      <section class="track-one">
-        <section class="controls">
-          <label for="attack">Attack</label>
-          <input name="attack" id="attack" type="range" min="0" max="1" value="0.2" step="0.1" />
-          <label for="release">Release</label>
-          <input name="release" id="release" type="range" min="0" max="1" value="0.5" step="0.1" />
-        </section>
-
-        <section class="pads">
-          <button role="switch" aria-checked="false"><span>Voice 1, Note 1</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 1, Note 2</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 1, Note 3</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 1, Note 4</span></button>
-        </section>
-      </section>
-
-      <section class="track-two">
-        <section class="controls">
-          <label for="hz">Hz</label>
-          <input name="hz" id="hz" type="range" min="660" max="1320" value="880" step="1" />
-
-          <label for="lfo">LFO</label>
-          <input name="lfo" id="lfo" type="range" min="20" max="40" value="30" step="1" />
-        </section>
-
-        <section class="pads">
-          <button role="switch" aria-checked="false"><span>Voice 2, Note 1</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 2, Note 2</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 2, Note 3</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 2, Note 4</span></button>
-        </section>
-      </section>
-
-      <section class="track-three">
-        <section class="controls">
-          <label for="duration">Duration</label>
-          <input name="duration" id="duration" type="range" min="0" max="2" value="1" step="0.1" />
-
-          <label for="band">Band</label>
-          <input name="band" id="band" type="range" min="400" max="1200" value="1000" step="5" />
-        </section>
-
-        <section class="pads">
-          <button role="switch" aria-checked="false"><span>Voice 3, Note 1</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 3, Note 2</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 3, Note 3</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 3, Note 4</span></button>
-        </section>
-      </section>
-
-      <section class="track-four">
-        <section class="controls">
-          <label for="rate">Rate</label>
-          <input name="rate" id="rate" type="range" min="0.1" max="2" value="1" step="0.1" />
-        </section>
-
-        <section class="pads">
-          <button role="switch" aria-checked="false"><span>Voice 4, Note 1</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 4, Note 2</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 4, Note 3</span></button>
-          <button role="switch" aria-checked="false"><span>Voice 4, Note 4</span></button>
-        </section>
-      </section>
-    </div>
-
-  </div>
-  <script src="wavetable.js"></script>
-  <script src="step-sequencer.js"></script>
-</body>
-
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>

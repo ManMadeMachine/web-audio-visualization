@@ -2,29 +2,21 @@
   "name": "web-audio-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon ./server/app.js",
-    "webpack": "./node_modules/.bin/webpack -w",
+    "start": "concurrently \"npm run server\" \"npm run --prefix client startDev\"",
+    "server": "nodemon server.js",
+    "client": "node start-client.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^4.0.1",
     "express": "^4.16.4",
-    "nodemon": "^1.18.5",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0"
+    "nodemon": "^1.18.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel": "^6.23.0",
-    "babel-loader": "^8.0.4",
-    "css-loader": "^1.0.1",
-    "morgan": "^1.9.1",
-    "webpack": "^4.23.1",
-    "webpack-cli": "^3.1.2"
+    "morgan": "^1.9.1"
   }
 }
