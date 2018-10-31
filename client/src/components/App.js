@@ -9,10 +9,10 @@ class App extends Component {
 
     this.canvas = React.createRef();
 
-    this.canvasController = new CanvasController(this.canvas);
   }
-
+  
   componentDidMount(){
+    this.canvasController = new CanvasController(this.canvas.current);
     this.canvasController.start();
   }
 
