@@ -27,9 +27,8 @@ class CanvasController {
         }).then(sampleBuffer => {
             const sampleSource = this.audioCtx.createBufferSource();
             sampleSource.buffer = sampleBuffer;
-            sampleSource.connect(this.analyser);
+            sampleSource.connect(this.analyser); // TODO: connect this to audioCtx.destination when the play button is done
             
-            // FIXME: Commented out until the play button is implemented
             sampleSource.start(); // TODO: Bind this to a play button etc. to avoid annoyng instant playback on page load.
             
             this.draw();
