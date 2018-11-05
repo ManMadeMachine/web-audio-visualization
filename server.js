@@ -13,4 +13,19 @@ app.use(logger('dev'));
 //   res.sendFile(path.resolve(__dirname, './../client/public/index.html'));
 // })
 
+app.get('/file/:name', (req, res) => {
+    const name = req.params.name;
+
+
+
+    res.sendFile(path.resolve(__dirname, `./files/${name}`), (err) => {
+        if (err){
+            console.error(err.message);
+        }
+        else {
+            console.log(`Successfully sent file ${name} to the client.`);
+        }
+    });
+})
+
 app.listen(8080, () => console.log('Listening on port 1234'));

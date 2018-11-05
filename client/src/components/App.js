@@ -12,6 +12,7 @@ class App extends Component {
   }
   
   componentDidMount(){
+    // TODO: Fetch available sample names from the server and show them in a drop-down etc.
     this.canvasController = new CanvasController(this.canvas.current);
     this.canvasController.start();
   }
