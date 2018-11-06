@@ -18,6 +18,15 @@ class CanvasController {
 
     }
 
+    listenToSpeakerOutput(){
+        navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
+            this.speakerSource = this.audioCtx.createMediaStreamSource(stream);
+            console.log("Got speaker audio source: " + this.speakerSource);
+            this.speakerSource.connect(this.analyser);
+            this.draw();
+        }).catch(err => console.error(err));
+    }
+
     load(fileName){
         console.log("Starting canvas controller...");
         this.fileName = fileName;
