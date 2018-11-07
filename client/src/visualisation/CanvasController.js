@@ -9,7 +9,7 @@ class CanvasController {
         this.audioCtx = new AudioContext();
         this.analyser = this.audioCtx.createAnalyser();
         this.analyser.fftSize = 2048;
-        this.analyserBufferLength = this.analyser.fftSize;
+        this.analyserBufferLength = this.analyser.frequencyBinCount;
         this.dataArray = new Uint8Array(this.analyserBufferLength);
 
         this.draw = this.draw.bind(this);
@@ -18,6 +18,8 @@ class CanvasController {
 
     }
 
+    // TODO: Add a control for this feature, it should not be enabled automatically if I want to keep the
+    // sample file playback option.
     listenToSpeakerOutput(){
         navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
             this.speakerSource = this.audioCtx.createMediaStreamSource(stream);

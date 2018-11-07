@@ -71,7 +71,7 @@ class App extends Component {
             <option value="dtmf.mp3">Modem dial-up sample</option>
           </select>
           <div className="canvas-container">
-            <canvas ref={this.canvas} id="canvas" width="640" height="480"></canvas>
+            <canvas ref={this.canvas} id="canvas" width="1024" height="768"></canvas>
           </div>
           <div className="controls">
             <button id="play" className="button play-button" onClick={this.togglePlay}><span>{this.state.isPlaying ? 'Pause' : 'Play'}</span></button>
