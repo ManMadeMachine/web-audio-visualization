@@ -94,6 +94,7 @@ class CanvasController {
             const v = this.dataArray[i] / 128.0;
             const y = (v *  this.height / 4) + this.height / 4; // The addition is a modifier so that the whole canvas height isn't used
 
+            this.ctx.strokeStyle = `rgb(${this.dataArray[i]*Math.random()}, ${this.dataArray[i] * Math.random()}, ${this.dataArray[i] *  Math.random()})`;
             if (i === 0){
                 this.ctx.moveTo(x, y);
             }
