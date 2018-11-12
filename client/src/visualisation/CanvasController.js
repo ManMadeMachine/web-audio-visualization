@@ -16,10 +16,9 @@ class CanvasController {
 
         this.draw = this.draw.bind(this);
 
-        this.isLoaded = false;
-        this.bgFlashing = false;    // Controls background flashing, based on the amplitude of the sound signal
+        this.bgFlashing = false;    // Controls background flashing, based on the amplitude of the sound signal.
         this.cube = false;  // Controls whether a pulsating cube is drawn in the middle of the canvas.
-
+        this.waveform = false;  // Controls the waveform pattern to be rendered.
     }
 
     // TODO: Add a control for this feature, it should not be enabled automatically if I want to keep the
@@ -32,53 +31,6 @@ class CanvasController {
         }).catch(err => console.error(err));
     }
 
-    // TODO: Do I want to load files from somewhere...?
-    load(fileName){
-        console.log("Starting canvas controller...");
-        this.fileName = fileName;
-
-        // TODO: Load and prepare the file in it's own function. 
-        // TODO: Check if there already was some sample playing, and flush the data buffer. Now the samples are mixed, since
-        // a new buffer source is being created on sample load. 
-        fetch(`/file/${fileName}`).then(response => {
-            return response.arrayBuffer();
-        }).then(arrayBuffer => {
-            return this.audioCtx.decodeAudioData(arrayBuffer);
-        }).then(sampleBuffer => {
-            this.sampleSource = this.audioCtx.createBufferSource();
-            this.sampleSource.buffer = sampleBuffer;
-            this.sampleSource.connect(this.analyser).connect(this.audioCtx.destination); // TODO: connect this to audioCtx.destination when the play button is done
-            
-            //sampleSource.start(); // TODO: Bind this to a play button etc. to avoid annoyng instant playback on page load.
-           
-            console.log("SampleSource state: " + this.sampleSource);
-            this.isLoaded = true;
-            this.draw();
-
-        });
-        
-    }
-
-    play(){
-        // This is the initial state, the sound sample has been created and loaded, and the context state is 'running'. 
-        // In consecutive calls to this method, the state should be suspended.. *SHOULD* be..
-        if (this.isLoaded && this.audioCtx.state === 'running'){
-            this.sampleSource.start();
-        }
-        else if (this.audioCtx.state === 'suspended'){
-            this.audioCtx.resume().then(() => {
-                console.log("Playing sample");
-            });
-        }
-    }
-
-    pause(){
-        if (this.audioCtx.state === 'running'){
-           this.audioCtx.suspend().then(() => {
-                console.log("Paused sample");
-           })         
-        }
-    }
 
     setBgFlashing(flashing){
         this.bgFlashing = flashing;
@@ -86,6 +38,10 @@ class CanvasController {
 
     setCube(cube){
         this.cube = cube;
+    }
+
+    setWaveform(waveform){
+        this.waveform = waveform;
     }
 
     draw(){
@@ -99,14 +55,20 @@ class CanvasController {
         if(this.bgFlashing){
             this.ctx.fillStyle = `rgb(${amplitude * Math.random()}, ${amplitude * Math.random()}, ${amplitude * Math.random()})`; // This option causes rapid FLASHING
         }else{
-            this.ctx.fillStyle = 'rgb(10, 120, 150)'; //this just re-draws the background with a simple color, this DOES NOT FLASH
+            this.ctx.fillStyle = 'rgb(0, 0, 0)'; //this just re-draws the background with a simple color, this DOES NOT FLASH
         }
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         if (this.cube){
-            geometry.createRectangle(this.ctx, (this.width / 2) - (amplitude), (this.height / 2) - (amplitude),  amplitude * 2, amplitude * 2);
+            geometry.createRectangle(this.ctx, (this.width / 2) - (amplitude), (this.height / 2) - (amplitude),  amplitude * 2, amplitude * 2); 
         }
     
+        if (this.waveform){
+            this.drawWaveform();
+        }
+    }
+
+    drawWaveform(){
         this.ctx.beginPath();
         
         const sliceWidth = this.width * 1.0 / this.analyserBufferLength;
@@ -129,7 +91,6 @@ class CanvasController {
             x += sliceWidth;
         }
         this.ctx.stroke();
-
     }
 }
 

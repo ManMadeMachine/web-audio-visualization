@@ -8,23 +8,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-      isPlaying: false,
-      selectedSample: '',
-      availableSamples: [],
       bgFlashing: false,
-      cube: false
+      cube: false,
+      waveform: false
     };
 
     this.canvas = React.createRef();
-    this.togglePlay = this.togglePlay.bind(this);
-    this.selectSample = this.selectSample.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   
   componentDidMount(){
     // TODO: Fetch available sample names from the server and show them in a drop-down etc.
     this.canvasController = new CanvasController(this.canvas.current);
-    // this.canvasController.load(`virtual-flesh.mp3`);
     this.canvasController.listenToSpeakerOutput();
   }
 
@@ -37,36 +32,6 @@ class App extends Component {
     });
   }
 
-  togglePlay(){
-    const {isPlaying } = this.state;
-
-    if(isPlaying){
-      this.canvasController.pause();
-      this.setState({
-        isPlaying: false,
-      })
-    }
-    else{
-      this.canvasController.play();
-      this.setState({
-        isPlaying: true
-      });
-    }
-  }
-
-  selectSample(e){
-    const sampleName = e.target.value;
-
-    console.log("Selected sample: " + sampleName);
-
-    this.setState({
-      isPlaying: false,
-      selectedSample: sampleName	// TODO: Is this even needed..?
-    });
-
-    this.canvasController.load(sampleName);
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.bgFlashing !== this.state.bgFlashing){
       this.canvasController.setBgFlashing(this.state.bgFlashing);
@@ -74,6 +39,10 @@ class App extends Component {
 
     if (prevState.cube !== this.state.cube){
       this.canvasController.setCube(this.state.cube);
+    }
+
+    if (prevState.waveform !== this.state.waveform){
+      this.canvasController.setWaveform(this.state.waveform);
     }
   }
 
@@ -86,25 +55,22 @@ class App extends Component {
           </p>
         </header>
         <content>
-          <select className="sample-list" onChange={this.selectSample} hidden>
-          {/* TODO: Maybe the sample names need to be shown like the filenames. In that case the selectedSample is needed in the state. */}
-            <option value="virtual-flesh.mp3">Virtual Flesh</option> 
-            <option value="Humanfobia-Spheres_into_the_abyss.mp3">Humanfobia - Spheres into the abyss</option>
-            <option value="dtmf.mp3">Modem dial-up sample</option>
-          </select>
           <div className="center">
             <canvas ref={this.canvas} id="canvas" width="1024" height="768"></canvas>
             {/* TODO: Create a new component from these and tie them into state */}
             <div className="visual-controls">
               <div className="effect-controls">
-                <label htmlFor="bgFlashing">Flashing BG ({this.state.bgFlashing.toString()})</label>
+                <label htmlFor="bgFlashing">Flashing BG</label>
                 <input type="checkbox" name="bgFlashing" value={this.state.bgFlashing} onChange={this.handleChange} />
 
                 <label htmlFor="cube">Cube</label>
                 <input type="checkbox" name="cube" checked={this.state.cube} onChange={this.handleChange}></input>
+
+                <label htmlFor="waveform">Waveform</label>
+                <input type="checkbox" name="waveform" checked={this.state.waveform} onChange={this.handleChange}></input>
               </div>
               <div className="bg-color-controls">
-                <h5>Background color values:</h5>
+                <h5>Background color values (TBD):</h5>
                 <div>
                   <label htmlFor="red">Red: </label>
                   <input name="red" type="range" defaultValue="0" min="0" max="255" step="1" />
