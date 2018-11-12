@@ -6,17 +6,10 @@ const app = express();
 
 app.use(logger('dev'));
 
-// app.use(express.static(path.join(__dirname, './../client/public')));
-
-
-// app.use('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, './../client/public/index.html'));
-// })
-
+// This can still stay, it is general enough so that I can use it in the future if necessary.
+// Although it will still presume a back-end folder and files inside it. 
 app.get('/file/:name', (req, res) => {
     const name = req.params.name;
-
-
 
     res.sendFile(path.resolve(__dirname, `./files/${name}`), (err) => {
         if (err){
