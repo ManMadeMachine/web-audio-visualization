@@ -58,14 +58,16 @@ class CanvasController {
             this.ctx.fillStyle = 'rgb(0, 0, 0)'; //this just re-draws the background with a simple color, this DOES NOT FLASH
         }
         this.ctx.fillRect(0, 0, this.width, this.height);
-
+        
         if (this.cube){
             geometry.createRectangle(this.ctx, (this.width / 2) - (amplitude), (this.height / 2) - (amplitude),  amplitude * 2, amplitude * 2); 
         }
-    
+        
         if (this.waveform){
             this.drawWaveform();
         }
+        geometry.createCircle(this.ctx, this.width / 4, this.height / 4, amplitude / 2 );
+
     }
 
     drawWaveform(){

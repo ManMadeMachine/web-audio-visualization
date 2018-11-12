@@ -3,8 +3,16 @@ const createRectangle = (ctx, x, y, width, height) => {
     ctx.fillRect(x, y, width, height);
 }
 
+const createCircle = (ctx, x, y, radius) => {
+    ctx.beginPath();
+    ctx.fillStyle = `rgb(1, 156, 196)`;
+    ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+    ctx.fill();
+}
+
 const geometry = {
-    createRectangle
+    createRectangle,
+    createCircle
 };
 
 export default geometry;
