@@ -11,8 +11,8 @@ class App extends Component {
       isPlaying: false,
       selectedSample: '',
       availableSamples: [],
-      bgFlashing: true,
-      cube: true
+      bgFlashing: false,
+      cube: false
     };
 
     this.canvas = React.createRef();
@@ -65,6 +65,16 @@ class App extends Component {
     });
 
     this.canvasController.load(sampleName);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.bgFlashing !== this.state.bgFlashing){
+      this.canvasController.setBgFlashing(this.state.bgFlashing);
+    }
+
+    if (prevState.cube !== this.state.cube){
+      this.canvasController.setCube(this.state.cube);
+    }
   }
 
   render() {

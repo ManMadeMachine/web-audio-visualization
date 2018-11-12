@@ -80,6 +80,14 @@ class CanvasController {
         }
     }
 
+    setBgFlashing(flashing){
+        this.bgFlashing = flashing;
+    }
+
+    setCube(cube){
+        this.cube = cube;
+    }
+
     draw(){
         requestAnimationFrame(this.draw);
         this.analyser.getByteTimeDomainData(this.dataArray);
