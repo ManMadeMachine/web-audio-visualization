@@ -17,6 +17,8 @@ class CanvasController {
         this.draw = this.draw.bind(this);
 
         this.isLoaded = false;
+        this.bgFlashing = false;    // Controls background flashing, based on the amplitude of the sound signal
+        this.cube = false;  // Controls whether a pulsating cube is drawn in the middle of the canvas.
 
     }
 
@@ -25,7 +27,6 @@ class CanvasController {
     listenToSpeakerOutput(){
         navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
             this.speakerSource = this.audioCtx.createMediaStreamSource(stream);
-            console.log("Got speaker audio source: " + this.speakerSource);
             this.speakerSource.connect(this.analyser);
             this.draw();
         }).catch(err => console.error(err));
@@ -87,13 +88,17 @@ class CanvasController {
         const highest= Math.max(...this.dataArray);
         const amplitude = highest - lowest;
 
-        // this.ctx.fillStyle = 'rgb(10, 120, 150)'; //this just re-draws the background with a simple color, this DOES NOT FLASH
-        this.ctx.fillStyle = `rgb(${amplitude * Math.random()}, ${amplitude * Math.random()}, ${amplitude * Math.random()})`; // This option causes rapid FLASHING
+        if(this.bgFlashing){
+            this.ctx.fillStyle = `rgb(${amplitude * Math.random()}, ${amplitude * Math.random()}, ${amplitude * Math.random()})`; // This option causes rapid FLASHING
+        }else{
+            this.ctx.fillStyle = 'rgb(10, 120, 150)'; //this just re-draws the background with a simple color, this DOES NOT FLASH
+        }
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        geometry.createRectangle(this.ctx, (this.width / 2) - (amplitude), (this.height / 2) - (amplitude),  amplitude * 2, amplitude * 2);
-
-
+        if (this.cube){
+            geometry.createRectangle(this.ctx, (this.width / 2) - (amplitude), (this.height / 2) - (amplitude),  amplitude * 2, amplitude * 2);
+        }
+    
         this.ctx.beginPath();
         
         const sliceWidth = this.width * 1.0 / this.analyserBufferLength;
