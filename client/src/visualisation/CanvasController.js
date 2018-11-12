@@ -1,3 +1,5 @@
+import geometry from './../utils/geometry';
+
 class CanvasController {
     constructor(canvas){
         this.ctx = canvas.getContext('2d');
@@ -29,6 +31,7 @@ class CanvasController {
         }).catch(err => console.error(err));
     }
 
+    // TODO: Do I want to load files from somewhere...?
     load(fileName){
         console.log("Starting canvas controller...");
         this.fileName = fileName;
@@ -79,13 +82,17 @@ class CanvasController {
     draw(){
         requestAnimationFrame(this.draw);
         this.analyser.getByteTimeDomainData(this.dataArray);
-        this.ctx.fillStyle = 'rgb(10, 120, 150)';
+
+        const lowest = Math.min(...this.dataArray);
+        const highest= Math.max(...this.dataArray);
+        const amplitude = highest - lowest;
+
+        // this.ctx.fillStyle = 'rgb(10, 120, 150)'; //this just re-draws the background with a simple color, this DOES NOT FLASH
+        this.ctx.fillStyle = `rgb(${amplitude * Math.random()}, ${amplitude * Math.random()}, ${amplitude * Math.random()})`; // This option causes rapid FLASHING
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw the name of the file onto the canvas
-        this.ctx.font = '20px Arial';
-        this.ctx.fillStyle = 'rgb(30, 30, 30)'
-        this.ctx.fillText(this.fileName, 20, 30);
+        geometry.createRectangle(this.ctx, (this.width / 2) - (amplitude), (this.height / 2) - (amplitude),  amplitude * 2, amplitude * 2);
+
 
         this.ctx.beginPath();
         
@@ -96,7 +103,9 @@ class CanvasController {
             const v = this.dataArray[i] / 128.0;
             const y = (v *  this.height / 4) + this.height / 4; // The addition is a modifier so that the whole canvas height isn't used
 
-            this.ctx.strokeStyle = `rgb(${this.dataArray[i]*Math.random()}, ${this.dataArray[i] * Math.random()}, ${this.dataArray[i] *  Math.random()})`;
+            
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeStyle = `rgb(255, 255, 25)`;
             if (i === 0){
                 this.ctx.moveTo(x, y);
             }
