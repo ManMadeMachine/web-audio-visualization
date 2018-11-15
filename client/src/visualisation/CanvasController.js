@@ -1,8 +1,10 @@
-import geometry from './../utils/geometry';
+import geometry from './utils/geometry';
+import { vertexShaderSource, fragmentShaderSource } from './shaders/2dShaders';
 
 class CanvasController {
     constructor(canvas){
-        this.ctx = canvas.getContext('2d');
+        // this.ctx = canvas.getContext('2d');  // CANNOT CREATE BOTH CONTEXTS!
+        this.gl = canvas.getContext('webgl');
         this.width = canvas.width;
         this.height = canvas.height;
 
@@ -31,6 +33,101 @@ class CanvasController {
         }).catch(err => console.error(err));
     }
 
+    drawWebGL(){
+        /* BEGIN INITIALIZATION CODE */
+        if (!this.gl){
+            console.log(`Could not retrieve WebGL context from canvas!`);
+            return;
+        }
+
+        console.log(`WebGL context initialized!`);
+
+        const vertexShader = this.createShader(this.gl, this.gl.VERTEX_SHADER, vertexShaderSource);
+        const fragmentShader = this.createShader(this.gl, this.gl.FRAGMENT_SHADER, fragmentShaderSource);
+        const program = this.createProgram(this.gl, vertexShader, fragmentShader);
+
+        // Look up the location of the attribute 'a_position' in the just-created program
+        const positionAttribLocation = this.gl.getAttribLocation(program, 'a_position');
+
+        // Look up the uniform location
+        const resolutionUniformLocation = this.gl.getUniformLocation(program, 'u_resolution');
+        
+        const colorUniformLocation = this.gl.getUniformLocation(program, 'u_color');
+
+        // Create a binary data buffer for position
+        const positionBuffer = this.gl.createBuffer();
+
+        // Create a binding between local buffer and WebGL bind point.
+        // This way WebGL can use the local resource through the bind point.
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
+
+        /* END INITIALIZATION CODE */
+
+        
+        /* BEGIN RENDERING CODE (this code should be called every time we actually want to draw something) */
+        // Resize the GL viewport to match the canvas size
+        this.gl.viewport(0, 0, this.width, this.height);
+
+        // Clear the canvas
+        this.gl.clearColor(0, 0, 0, 0);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+
+        // Tell WebGL to use our program (a pair of shaders)
+        this.gl.useProgram(program);
+
+        
+        // Enable the position attribute
+        this.gl.enableVertexAttribArray(positionAttribLocation);
+        
+        // Bind the position buffer -> Done above...?
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
+        
+        // The the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+        const size = 2;                     // read 2/4 components per iteration (x,y coordinates)
+        const type = this.gl.FLOAT;         // 32 bit float values
+        const normalize = false;            // don't normalize the data
+        const stride = 0;                   // 0 = move forward size * sizeof(type) in each iteration to get the next position.
+        const attribOffset = 0;                   // start at the beginning of the buffer
+        
+        this.gl.vertexAttribPointer(positionAttribLocation, size, type, normalize, stride, attribOffset);
+        
+        this.gl.uniform2f(resolutionUniformLocation, this.width, this.height);
+        
+        
+        geometry.setRectangle(this.gl, 350, 200, 50, 400);
+        this.gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
+        const primitiveType = this.gl.TRIANGLES;
+        const offset = 0;
+        const count = 6;
+        this.gl.drawArrays(primitiveType, offset, count);
+    }
+
+    createShader(gl, type, source){
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+        if(success){
+            return shader;
+        }
+        console.log(gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+    }
+
+    createProgram(gl, vertexShader, fragmentShader){
+        const program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+
+        const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+        if(success){
+            return program;
+        }
+
+        console.log(gl.getProgramInfoLog(program));
+        gl.deleteProgram(program);
+    }
 
     setBgFlashing(flashing){
         this.bgFlashing = flashing;
