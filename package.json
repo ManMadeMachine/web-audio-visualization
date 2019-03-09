@@ -14,7 +14,7 @@
   "dependencies": {
     "concurrently": "^4.0.1",
     "express": "^4.16.4",
-    "nodemon": "^1.18.5"
+    "nodemon": "^1.18.10"
   },
   "devDependencies": {
     "morgan": "^1.9.1"
