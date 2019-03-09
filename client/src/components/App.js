@@ -10,7 +10,8 @@ class App extends Component {
     this.state = {
       bgFlashing: false,
       cube: false,
-      waveform: false
+      waveform: false,
+      started: false
     };
 
     this.canvas = React.createRef();
@@ -18,9 +19,7 @@ class App extends Component {
   }
   
   componentDidMount(){
-    // TODO: Fetch available sample names from the server and show them in a drop-down etc.
     this.canvasController = new CanvasController(this.canvas.current);
-    this.canvasController.listenToSpeakerOutput();
   }
 
   handleChange(e){
@@ -44,6 +43,11 @@ class App extends Component {
     if (prevState.waveform !== this.state.waveform){
       this.canvasController.setWaveform(this.state.waveform);
     }
+
+    if (!prevState.started){
+      // Need to resume the AudioContext manually, because of Google policy: https://goo.gl/7K7WLu
+      this.canvasController.listenToSpeakerOutput();
+    }
   }
 
   render() {
@@ -60,6 +64,7 @@ class App extends Component {
             {/* TODO: Create a new component from these and tie them into state */}
             <div className="visual-controls">
               <div className="effect-controls">
+                <button id="start_audio_context" onClick={this.handleChange}>Start!</button>
                 <label htmlFor="bgFlashing">Flashing BG</label>
                 <input type="checkbox" name="bgFlashing" value={this.state.bgFlashing} onChange={this.handleChange} />
 
