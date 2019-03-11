@@ -23,14 +23,14 @@ class CanvasController {
         this.waveform = false;  // Controls the waveform pattern to be rendered.
     }
 
-    // TODO: Add a control for this feature, it should not be enabled automatically if I want to keep the
-    // sample file playback option.
     listenToSpeakerOutput(){
+        console.log("listenToSpeakerOutput")
         navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
+            this.audioCtx.resume();
             this.speakerSource = this.audioCtx.createMediaStreamSource(stream);
             this.speakerSource.connect(this.analyser);
             this.draw();
-        }).catch(err => console.error(err));
+        }).catch(err => console.error("Error when starting audio context: " + err));
     }
 
     drawWebGL(){
