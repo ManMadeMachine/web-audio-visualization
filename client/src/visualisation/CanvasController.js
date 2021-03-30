@@ -4,7 +4,12 @@ import { vertexShaderSource, fragmentShaderSource } from './shaders/2dShaders';
 class CanvasController {
     constructor(canvas){
         // this.ctx = canvas.getContext('2d');  // CANNOT CREATE BOTH CONTEXTS!
-        this.gl = canvas.getContext('webgl');
+        this.gl = canvas.getContext('webgl2');
+
+        if (!this.gl){
+            console.log("WebGL2 not available");
+            return;
+        }
         this.width = canvas.width;
         this.height = canvas.height;
 
@@ -47,12 +52,12 @@ class CanvasController {
         const program = this.createProgram(this.gl, vertexShader, fragmentShader);
 
         // Look up the location of the attribute 'a_position' in the just-created program
-        const positionAttribLocation = this.gl.getAttribLocation(program, 'a_position');
+        const positionAttributeLocation = this.gl.getAttribLocation(program, 'a_position');
 
         // Look up the uniform location
-        const resolutionUniformLocation = this.gl.getUniformLocation(program, 'u_resolution');
+        // const resolutionUniformLocation = this.gl.getUniformLocation(program, 'u_resolution');
         
-        const colorUniformLocation = this.gl.getUniformLocation(program, 'u_color');
+        // const colorUniformLocation = this.gl.getUniformLocation(program, 'u_color');
 
         // Create a binary data buffer for position
         const positionBuffer = this.gl.createBuffer();
@@ -60,46 +65,56 @@ class CanvasController {
         // Create a binding between local buffer and WebGL bind point.
         // This way WebGL can use the local resource through the bind point.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
-
         /* END INITIALIZATION CODE */
-
         
         /* BEGIN RENDERING CODE (this code should be called every time we actually want to draw something) */
+
+        // Three 2D points
+        const positions = [
+            0, 0,
+            0, 0.5,
+            0.7, 0,
+        ];
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(positions), this.gl.STATIC_DRAW);
+
+        const vao = this.gl.createVertexArray();
+
+        this.gl.bindVertexArray(vao);
+
+        this.gl.enableVertexAttribArray(positionAttributeLocation);
+
         // Resize the GL viewport to match the canvas size
-        this.gl.viewport(0, 0, this.width, this.height);
+        // this.gl.viewport(0, 0, this.width, this.height);
 
         // Clear the canvas
-        this.gl.clearColor(0, 0, 0, 0);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+        // this.gl.clearColor(0, 0, 0, 0);
+        // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
         // Tell WebGL to use our program (a pair of shaders)
-        this.gl.useProgram(program);
+        // this.gl.useProgram(program);
 
         
         // Enable the position attribute
-        this.gl.enableVertexAttribArray(positionAttribLocation);
+        // this.gl.enableVertexAttribArray(positionAttribLocation);
         
-        // Bind the position buffer -> Done above...?
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
-        
-        // The the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-        const size = 2;                     // read 2/4 components per iteration (x,y coordinates)
+        // The attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+        const size = 2;                     // read 2 components per iteration (x,y coordinates)
         const type = this.gl.FLOAT;         // 32 bit float values
         const normalize = false;            // don't normalize the data
         const stride = 0;                   // 0 = move forward size * sizeof(type) in each iteration to get the next position.
-        const attribOffset = 0;                   // start at the beginning of the buffer
+        const offset = 0;                   // start at the beginning of the buffer
         
-        this.gl.vertexAttribPointer(positionAttribLocation, size, type, normalize, stride, attribOffset);
+        this.gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
         
-        this.gl.uniform2f(resolutionUniformLocation, this.width, this.height);
+        // this.gl.uniform2f(resolutionUniformLocation, this.width, this.height);
         
         
-        geometry.setRectangle(this.gl, 350, 200, 50, 400);
-        this.gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
-        const primitiveType = this.gl.TRIANGLES;
-        const offset = 0;
-        const count = 6;
-        this.gl.drawArrays(primitiveType, offset, count);
+        // geometry.setRectangle(this.gl, 350, 200, 50, 400);
+        // this.gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
+        // const primitiveType = this.gl.TRIANGLES;
+        // const offset = 0;
+        // const count = 6;
+        // this.gl.drawArrays(primitiveType, offset, count);
     }
 
     createShader(gl, type, source){

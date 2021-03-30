@@ -21,4 +21,4 @@ app.get('/file/:name', (req, res) => {
     });
 })
 
-app.listen(8080, () => console.log('Listening on port 1234'));
+app.listen(8080, () => console.log('Listening on port 8080'));

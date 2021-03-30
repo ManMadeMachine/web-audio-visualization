@@ -1,32 +1,22 @@
-export const vertexShaderSource = `
-    // an attribute will receive data from the buffer
-    attribute vec2 a_position;  // x,y position vector
-    uniform vec2 u_resolution;  
+export const vertexShaderSource = `#version 300 es
+
+    in vec4 a_position;
 
     // all shaders have main
     void main(){
-        // convert the position from pixels to 0.0 to 1.0
-        vec2 zeroToOne = a_position / u_resolution;
+        gl_Position = a_position;
+    }
+`;
 
-        // convert from 0->1 to 0->2
-        vec2 zeroToTwo = zeroToOne * 2.0;
+export const fragmentShaderSource = `#version 300 es
 
-        // convert from 0-> to -1->+1 (clipspace)
-        vec2 clipSpace = zeroToTwo - 1.0;
-
-        // gl_Position is a special variable a vertex shader
-        // is responsible for setting
-        gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-    }`;
-
-export const fragmentShaderSource = `
     // fragment shaders don't have a default precision so
     // we need to pick one. mediump is good enough
     precision mediump float;
 
-    uniform vec4 u_color;
+    out vec4 outColor;
 
     void main(){
-        // fragment shader is responsible for gl_FragColor
-        gl_FragColor = u_color;
-    }`;
+        outColor = vec4(1, 0, 0.5, 1);
+    }
+`;
